@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:t_library/constatnts.dart';
-import 'package:t_library/screens/login_screen.dart';
-import 'package:t_library/widgets/screens_background.dart';
+import '../constatnts.dart';
+import '../screens/auth_screen.dart';
+import '../widgets/screens_background.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const routeName = '/welcome-screen';
@@ -11,14 +11,37 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
+  AnimationController? _controller;
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 2)).then(
-      (value) =>
-          Navigator.of(context).pushReplacementNamed(LoginScreen.routeName),
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1200),
     );
+    _controller!.forward();
+    _controller!.addListener(() {
+      // print(_controller!.value);
+      // print('valueeeee ${_animation!.value}');
+      if (_controller!.isCompleted) {
+        _controller!.reverse();
+      }
+      if (_controller!.isDismissed) {
+        _controller!.forward();
+      }
+      setState(() {});
+    });
+    Future.delayed(Duration(seconds: 5)).then(
+      (_) => Navigator.of(context).pushReplacementNamed(AuthScreen.routeName),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller!.stop();
+    super.dispose();
   }
 
   @override
@@ -36,16 +59,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 child: Container(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 60.0),
-                    child: Image(
-                      image: AssetImage(logoPath),
-                      fit: BoxFit.contain,
-                      width: 180,
-                      height: 180,
+                    child: Opacity(
+                      opacity: 0.8,
+                      child: Image(
+                        image: AssetImage(logoPath),
+                        fit: BoxFit.contain,
+                        width: 180 + _controller!.value * 10,
+                        height: 180 + _controller!.value * 10,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
+
             // SizedBox(
             //   height: 150,
             // ),
@@ -53,16 +80,37 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               flex: 1,
               child: Align(
                 alignment: Alignment.center,
-                child: Padding(
-                  padding: EdgeInsets.all(29),
-                  child: Text(
-                    'TasQment',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontFamily: '',
-                      color: Colors.white.withOpacity(0.7),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Positioned(
+                      right: 87,
+                      bottom: -5,
+                      child: Container(
+                        height: 75,
+                        width: 75,
+                        child: Opacity(
+                          opacity: 0.5,
+                          child: Image(
+                            image: AssetImage(tasQmentLogo),
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Text(
+                        'TasQment',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontFamily: '',
+                          color: Colors.white.withOpacity(0.7),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

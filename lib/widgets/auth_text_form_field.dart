@@ -13,6 +13,8 @@ class AuthTextFormField extends StatelessWidget {
     this.obscureText,
     this.keyboardType,
     this.textInputAction,
+    this.validator,
+    this.autoFocus = false,
   }) : super(key: key);
 
   final String? hintText;
@@ -23,9 +25,12 @@ class AuthTextFormField extends StatelessWidget {
   final bool? obscureText;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
+  final String? Function(String?)? validator;
+  final bool autoFocus;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autofocus: autoFocus,
       controller: controller,
       focusNode: focusNode,
       obscureText: obscureText ?? false,
@@ -38,6 +43,7 @@ class AuthTextFormField extends StatelessWidget {
           : null,
       textAlign: TextAlign.start,
       cursorColor: Colors.black,
+      validator: validator,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         hintText: hintText ?? '',
