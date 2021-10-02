@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:t_library/constatnts.dart';
+import '../constatnts.dart';
 
 class LoginButton extends StatelessWidget {
   const LoginButton({

@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:t_library/constatnts.dart';
+import '../constatnts.dart';
 
 class AuthTextFormField extends StatelessWidget {
-  const AuthTextFormField({
-    Key? key,
-    this.hintText,
-    this.controller,
-    this.focusNode,
-    this.nextFocusNode,
-    this.icon,
-    this.obscureText,
-    this.keyboardType,
-    this.textInputAction,
-    this.validator,
-    this.autoFocus = false,
-  }) : super(key: key);
+  const AuthTextFormField(
+      {Key? key,
+      this.hintText,
+      this.controller,
+      this.focusNode,
+      this.nextFocusNode,
+      this.icon,
+      this.obscureText,
+      this.keyboardType,
+      this.textInputAction,
+      this.validator,
+      this.autoFocus = false,
+      this.onSubmit})
+      : super(key: key);
 
   final String? hintText;
   final TextEditingController? controller;
@@ -26,6 +27,7 @@ class AuthTextFormField extends StatelessWidget {
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final String? Function(String?)? validator;
+  final void Function(String)? onSubmit;
   final bool autoFocus;
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class AuthTextFormField extends StatelessWidget {
           ? (_) {
               FocusScope.of(context).requestFocus(nextFocusNode);
             }
-          : null,
+          : onSubmit,
       textAlign: TextAlign.start,
       cursorColor: Colors.black,
       validator: validator,
