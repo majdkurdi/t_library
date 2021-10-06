@@ -4,7 +4,7 @@ import '../models/book.dart';
 
 const String baseUrl = 'http://192.168.137.1:8000/api';
 
-class BooksService {
+mixin BooksService {
   static Future<List<Book>> getBooks() async {
     final client =
         InterceptedClient.build(interceptors: [AuthorizationInterceptor()]);

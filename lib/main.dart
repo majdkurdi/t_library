@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         backgroundColor: Colors.black,
         buttonColor: Colors.white,
       ),
-      initialRoute: MainScreen.routeName,
+      initialRoute: WelcomeScreen.routeName,
       routes: {
         MainScreen.routeName: (ctx) => MainScreen(),
         AuthScreen.routeName: (ctx) => AuthScreen(),
