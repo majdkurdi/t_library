@@ -6,7 +6,7 @@ class AuthorizationInterceptor implements InterceptorContract {
     try {
       //String token =
       print('kxchl');
-      data.headers['authorization'] = 'Bearer ' + 'token';
+      data.headers.addAll({'Authorization': 'token'});
     } on Exception catch (e) {
       print(e);
     }
