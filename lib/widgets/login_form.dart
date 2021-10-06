@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../constatnts.dart';
-import '../screens/home_screen.dart';
+import '../screens/main_screen.dart';
 import '../services/auth.dart';
 import 'auth_text_form_field.dart';
 
@@ -48,7 +48,7 @@ class _LoginFormState extends State<LoginForm> {
     final user = await auth.logIn(
         email: _emailController.text, password: _passwordController.text);
     if (user != null) {
-      Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+      Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
     } else {
       showDialog(
           context: context,

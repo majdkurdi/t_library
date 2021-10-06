@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
+const String baseUrl = 'http://192.168.137.1:8000/api';
+
 class Auth {
   Auth._internal();
 
@@ -38,10 +40,9 @@ class Auth {
     required String password,
   }) async {
     try {
-      final logInUrl = Uri.parse(
-          'http://192.168.1.102:8000/api/login'); //TODO add logInUrlUrl
-      final response = await http.post(logInUrl,
-          body: {"email": "maximillia06@example.net", "password": "password"});
+      final logInUrl = Uri.parse('$baseUrl/login'); //TODO add logInUrlUrl
+      final response = await http
+          .post(logInUrl, body: {"email": email, "password": password});
       final responseBody = json.decode(response.body) as Map<String, dynamic>;
       print(responseBody);
       return User.fromJson(responseBody);

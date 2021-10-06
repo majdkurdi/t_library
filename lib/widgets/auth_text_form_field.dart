@@ -15,10 +15,12 @@ class AuthTextFormField extends StatelessWidget {
       this.textInputAction,
       this.validator,
       this.autoFocus = false,
+      this.suffix,
       this.onSubmit})
       : super(key: key);
 
   final String? hintText;
+  final Widget? suffix;
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
@@ -47,6 +49,7 @@ class AuthTextFormField extends StatelessWidget {
       cursorColor: Colors.black,
       validator: validator,
       decoration: InputDecoration(
+        prefixIcon: suffix,
         contentPadding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         hintText: hintText ?? '',
         fillColor: kWhiteColor,

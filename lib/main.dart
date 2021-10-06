@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 import './screens/auth_screen.dart';
-import './screens/home_screen.dart';
+import './screens/main_screen.dart';
 import './screens/welcome_screen.dart';
-import 'screens/auth_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,9 +21,9 @@ class MyApp extends StatelessWidget {
         backgroundColor: Colors.black,
         buttonColor: Colors.white,
       ),
-      initialRoute: WelcomeScreen.routeName,
+      initialRoute: MainScreen.routeName,
       routes: {
-        HomeScreen.routeName: (ctx) => HomeScreen(),
+        MainScreen.routeName: (ctx) => MainScreen(),
         AuthScreen.routeName: (ctx) => AuthScreen(),
         WelcomeScreen.routeName: (ctx) => WelcomeScreen(),
       },
