@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import './http_service.dart';
 import '../models/user.dart';
-
-const String baseUrl = 'http://192.168.137.1:8000/api';
 
 class Auth {
   Auth._internal();
@@ -26,12 +25,12 @@ class Auth {
   }) async {
     try {
       final signUpUrl = Uri.parse(''); //TODO add signUpUrl
-      final response = await http.post(signUpUrl);
+      final response = await http.post(Uri.parse('uri'));
       final responseBody = json.decode(response.body) as Map<String, dynamic>;
       return User.fromJson(responseBody);
     } on Exception catch (e) {
       print(e);
-      return null;
+      rethrow;
     }
   }
 
@@ -40,15 +39,14 @@ class Auth {
     required String password,
   }) async {
     try {
-      final logInUrl = Uri.parse('$baseUrl/login'); //TODO add logInUrlUrl
-      final response = await http
-          .post(logInUrl, body: {"email": email, "password": password});
+      final response = await http.post(Uri.parse('$baseUrl/login'),
+          body: {"email": email, "password": password});
       final responseBody = json.decode(response.body) as Map<String, dynamic>;
       print(responseBody);
       return User.fromJson(responseBody);
     } on Exception catch (e) {
       print(e);
-      return null;
+      rethrow;
     }
   }
 }

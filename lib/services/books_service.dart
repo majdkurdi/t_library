@@ -1,15 +1,19 @@
-import 'package:http_interceptor/http/http.dart';
-import './http_interceptor.dart';
+import 'dart:convert';
+
 import '../models/book.dart';
+import 'http_service.dart' as http;
 
 const String baseUrl = 'http://192.168.137.1:8000/api';
 
-mixin BooksService {
-  static Future<List<Book>> getBooks() async {
-    final client =
-        InterceptedClient.build(interceptors: [AuthorizationInterceptor()]);
-    final response = await client.get(Uri.parse('$baseUrl/book'));
+class BooksService {
+  Future<List<Book>> getBooks() async {
+    print('csv');
+
+    final response = await http.get('/book');
+    print('done');
     print(response.request?.headers);
+    print(jsonDecode(response.body));
+
     return bookFromJson(response.body);
   }
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constatnts.dart';
+import '../notifiers/auth_notifier.dart';
+import '../screens/main_screen.dart';
 import '../widgets/login.dart';
 import '../widgets/login_button.dart';
 import '../widgets/screens_background.dart';
@@ -11,6 +14,10 @@ enum AuthType {
   LogIn,
   SignUp,
 }
+
+final authProvider = Provider<AuthNotifier>((ref) {
+  return AuthNotifier();
+});
 
 class AuthScreen extends StatefulWidget {
   static const routeName = '/login';
@@ -90,13 +97,32 @@ class _AuthScreenState extends State<AuthScreen> {
                             phoneNumberController: _phoneNumberController,
                           ),
                   ),
-                  LoginButton(
-                    text: authType == AuthType.LogIn
-                        ? 'log in'
-                        : 'create account',
-                    onPressed: submitForm,
-                    //TODO login or sign up
-                    // submitForm,
+                  Consumer(
+                    builder: (context, watch, _) {
+                      final auth = watch(authProvider);
+                      return LoginButton(
+                        text: authType == AuthType.LogIn
+                            ? 'log in'
+                            : 'create account',
+                        onPressed: () async {
+                          submitForm();
+                          if (authType == AuthType.LogIn) {
+                            final loggedIn = await auth.login(
+                                _emailController.text,
+                                _passwordController.text);
+                            if (loggedIn) {
+                              Navigator.of(context)
+                                  .pushReplacementNamed(MainScreen.routeName);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Error!')));
+                            }
+                          }
+                        },
+                        //TODO login or sign up
+                        // submitForm,
+                      );
+                    },
                   ),
                   TextButton(
                     onPressed: () {

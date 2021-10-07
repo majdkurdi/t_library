@@ -1,16 +1,18 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http_interceptor/http_interceptor.dart';
+import '../notifiers/auth_notifier.dart';
+
+final authProvider = Provider<AuthNotifier>((ref) => AuthNotifier());
 
 class AuthorizationInterceptor implements InterceptorContract {
   @override
   Future<RequestData> interceptRequest({required RequestData data}) async {
     try {
-      //String token =
-      print('kxchl');
-      data.headers.addAll({'Authorization': 'token'});
+      final token = AuthNotifier().token;
+      data.headers.addAll({'Authorization': 'Bearer $token'});
     } on Exception catch (e) {
       print(e);
     }
-    print('xlkxzh');
     return data;
   }
 
