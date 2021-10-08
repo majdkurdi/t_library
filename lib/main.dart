@@ -15,13 +15,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: 'SEGEOPR',
-        primaryColor: Color(0xFF363636),
-        accentColor: Color(0xFF800000),
-        hintColor: Color(0xFF0B1A0B).withOpacity(0.5),
-        backgroundColor: Colors.black,
-        buttonColor: Colors.white,
-      ),
+          fontFamily: 'SEGEOPR',
+          primaryColor: Color(0xFF363636),
+          accentColor: Color(0xFF800000),
+          hintColor: Color(0xFF0B1A0B).withOpacity(0.5),
+          backgroundColor: Colors.black,
+          buttonColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.white)),
       initialRoute: WelcomeScreen.routeName,
       routes: {
         MainScreen.routeName: (ctx) => MainScreen(),

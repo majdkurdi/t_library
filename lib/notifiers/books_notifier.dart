@@ -9,6 +9,7 @@ class BooksNotifier extends ChangeNotifier {
   Future getBooks() async {
     try {
       books = await bookService.getBooks();
+      notifyListeners();
       return null;
     } on Exception catch (e) {
       return e;
