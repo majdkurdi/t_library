@@ -24,13 +24,13 @@ class BookCard extends StatelessWidget {
             child: Column(children: [
               Container(
                   height: 130,
-                  width: 100,
+                  width: 120,
                   child: ClipRRect(
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(25),
                         topRight: Radius.circular(25)),
                     child: FadeInImage(
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                       placeholder:
                           AssetImage('assets/images/t.library-logo.png'),
                       image: NetworkImage(book.image),
