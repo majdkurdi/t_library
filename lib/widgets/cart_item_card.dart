@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/cart_item.dart';
+import '../notifiers/cart_notifier.dart';
 
 class CartItemCard extends StatelessWidget {
   final int index;
   final CartItem item;
   final Function function;
   CartItemCard(this.index, this.item, this.function);
-  // final cartController = Get.find<CartController>();
+  final cartPrivider =
+      ChangeNotifierProvider<CartNotifier>((ref) => CartNotifier());
   @override
   Widget build(BuildContext context) {
     return Dismissible(
       key: GlobalKey(),
       onDismissed: (_) {
-        // cartController.removeFromCart(item);
+        context.read(cartPrivider).removeFromCart(item.id);
         function();
       },
       direction: DismissDirection.endToStart,

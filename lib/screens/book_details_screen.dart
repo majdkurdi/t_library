@@ -1,17 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:t_library/notifiers/cart_notifier.dart';
 import '../models/book.dart';
+import '../models/comment.dart';
 import '../notifiers/books_notifier.dart';
 import '../widgets/book_details.dart';
 import '../widgets/my_icon_button.dart';
 import '../widgets/screens_background.dart';
 
-class BookDetailsScreen extends StatelessWidget {
+class BookDetailsScreen extends StatefulWidget {
+  final Book book;
+
+  BookDetailsScreen(this.book);
+
+  @override
+  State<BookDetailsScreen> createState() => _BookDetailsScreenState();
+}
+
+class _BookDetailsScreenState extends State<BookDetailsScreen> {
   final booksProvider =
       ChangeNotifierProvider<BooksNotifier>((ref) => BooksNotifier());
+  final cartProvider =
+      ChangeNotifierProvider<CartNotifier>((ref) => CartNotifier());
 
-  final Book book;
-  BookDetailsScreen(this.book);
+  List<Comment> comments = [];
+
+  @override
+  void initState() {
+    Future.delayed(Duration(seconds: 0)).then((_) async {
+      comments =
+          (await context.read(booksProvider).getComments(widget.book.id)) ?? [];
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +46,7 @@ class BookDetailsScreen extends StatelessWidget {
             children: [
               FadeInImage(
                 placeholder: AssetImage('assets/t.librart-logo.png'),
-                image: NetworkImage(book.image),
+                image: NetworkImage(widget.book.image),
                 height: MediaQuery.of(context).size.height / 3,
                 width: MediaQuery.of(context).size.width,
                 // fit: BoxFit.cover,
@@ -34,7 +57,7 @@ class BookDetailsScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(book.title,
+                    Text(widget.book.title,
                         style: TextStyle(color: Colors.white, fontSize: 30)),
                     Row(
                       children: [
@@ -73,7 +96,8 @@ class BookDetailsScreen extends StatelessWidget {
                                                       context
                                                           .read(booksProvider)
                                                           .rateBook(
-                                                              bookId: book.id,
+                                                              bookId: widget
+                                                                  .book.id,
                                                               rate: i + 1);
                                                       Navigator.of(context)
                                                           .pop();
@@ -82,7 +106,12 @@ class BookDetailsScreen extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                    )));
+                                    ))).then((_) =>
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text('Thanks for your Opinion!'),
+                                  duration: Duration(seconds: 1),
+                                )));
                           },
                           child: Icon(Icons.rate_review),
                           backgroundColor: Colors.white.withOpacity(0.4),
@@ -90,7 +119,16 @@ class BookDetailsScreen extends StatelessWidget {
                         SizedBox(width: 10),
                         FloatingActionButton(
                           heroTag: '2',
-                          onPressed: () {},
+                          onPressed: () async {
+                            await context
+                                .read(cartProvider)
+                                .addToCart(widget.book);
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('book added to cart!',
+                                  style: TextStyle(color: Colors.white)),
+                            ));
+                          },
                           child: Icon(Icons.add_shopping_cart),
                           backgroundColor: Colors.white.withOpacity(0.4),
                         ),
@@ -100,7 +138,10 @@ class BookDetailsScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: BookDetails(book: book),
+                child: BookDetails(
+                  book: widget.book,
+                  comments: comments,
+                ),
               ),
             ],
           ),
