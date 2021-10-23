@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:t_library/screens/more_books_screen.dart';
 import './book_card.dart';
 import '../models/book.dart';
 
@@ -23,9 +24,23 @@ class BooksView extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-            child: Text(
-              '$title:',
-              style: TextStyle(color: Colors.white, fontSize: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '$title:',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) =>
+                            MoreBooksScreen(title: title, books: books)));
+                  },
+                  child:
+                      Text('see more', style: TextStyle(color: Colors.white)),
+                )
+              ],
             ),
           ),
           Container(

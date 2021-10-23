@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// import '../models/book.dart';
 import '../notifiers/auth_notifier.dart';
 import '../notifiers/books_notifier.dart';
 import '../screens/acount_screen.dart';
 import '../screens/cart_screen.dart';
 import '../widgets/auth_text_form_field.dart';
-// import '../widgets/book_card.dart';
 import '../widgets/books_view.dart';
 import '../widgets/my_icon_button.dart';
 import '../widgets/screens_background.dart';
@@ -149,6 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   title: 'Recommended For You',
                                   books: books,
                                 ),
+                                BooksView(books: books, title: 'All')
                               ],
                             ),
                           ),
