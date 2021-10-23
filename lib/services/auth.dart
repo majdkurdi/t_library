@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:t_library/models/auth_response.dart';
 import './http_service.dart';
-import '../models/user.dart';
+import '../models/auth_response.dart';
+// import '../models/user.dart';
 
 class Auth {
   Auth._internal();
@@ -22,11 +22,16 @@ class Auth {
     required String email,
     required String password,
     required String address,
-    required int phoneNumber,
+    required String phoneNumber,
   }) async {
     try {
-      final signUpUrl = Uri.parse(''); //TODO add signUpUrl
-      final response = await http.post(Uri.parse('uri'));
+      final response = await http.post(Uri.parse('$baseUrl/signup'), body: {
+        "name": name,
+        "email": email,
+        "password": password,
+        "phone_number": phoneNumber,
+        "address": address
+      });
       final responseBody = json.decode(response.body) as Map<String, dynamic>;
       return AuthResponse.fromJson(responseBody);
     } on Exception catch (e) {
@@ -42,11 +47,22 @@ class Auth {
     try {
       final response = await http.post(Uri.parse('$baseUrl/login'),
           body: {"email": email, "password": password});
+      print(response.body);
+      if (jsonDecode(response.body) == 'Wrong Credentials') return null;
       final responseBody = json.decode(response.body) as Map<String, dynamic>;
       print(responseBody);
       return AuthResponse.fromJson(responseBody);
     } on Exception catch (e) {
       print(e);
+      rethrow;
+    }
+  }
+
+  Future<void> logOut() async {
+    try {
+      await get('/logout');
+      print('logged out!');
+    } on Exception catch (_) {
       rethrow;
     }
   }

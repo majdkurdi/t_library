@@ -110,6 +110,20 @@ class _AuthScreenState extends State<AuthScreen> {
                             final loggedIn = await auth.login(
                                 _emailController.text,
                                 _passwordController.text);
+                            if (loggedIn == 'done') {
+                              Navigator.of(context)
+                                  .pushReplacementNamed(MainScreen.routeName);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(loggedIn)));
+                            }
+                          } else {
+                            final loggedIn = await auth.signUp(
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                                address: _addressController.text,
+                                phoneNumber: _phoneNumberController.text,
+                                name: _nameController.text);
                             if (loggedIn) {
                               Navigator.of(context)
                                   .pushReplacementNamed(MainScreen.routeName);
@@ -119,8 +133,6 @@ class _AuthScreenState extends State<AuthScreen> {
                             }
                           }
                         },
-                        //TODO login or sign up
-                        // submitForm,
                       );
                     },
                   ),

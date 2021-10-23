@@ -20,13 +20,17 @@ class AuthNotifier extends ChangeNotifier {
   final _userService = UserService();
   AuthResponse? _currentUser;
 
-  Future<bool> login(String email, String password) async {
+  Future<String> login(String email, String password) async {
     try {
       _currentUser = await _auth.logIn(email: email, password: password);
-      await rememberUser(_currentUser!);
-      return true;
+      if (_currentUser != null) {
+        await rememberUser(_currentUser!);
+        return 'done';
+      } else {
+        return 'Wrong Credentials';
+      }
     } on Exception catch (_) {
-      return false;
+      return 'Error!';
     }
   }
 
@@ -48,9 +52,35 @@ class AuthNotifier extends ChangeNotifier {
     }
   }
 
-  void logout() async {
-    _currentUser = null;
-    await clearUser();
+  Future logout() async {
+    try {
+      await _auth.logOut();
+      _currentUser = null;
+      await clearUser();
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  Future<bool> signUp(
+      {required String email,
+      required String password,
+      required String address,
+      required String phoneNumber,
+      required String name}) async {
+    try {
+      _currentUser = await _auth.signUp(
+          name: name,
+          email: email,
+          password: password,
+          address: address,
+          phoneNumber: phoneNumber);
+      await rememberUser(_currentUser!);
+      return true;
+    } on Exception catch (e) {
+      print(e);
+      return false;
+    }
   }
 
   String? get token {

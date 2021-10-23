@@ -36,7 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final username = context.read(authProvider).user?.name;
     return ScreensBackground(
         child: loading
-            ? Expanded(
+            ? Container(
+                height: MediaQuery.of(context).size.height,
                 child: Center(
                   child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation(Colors.white),
