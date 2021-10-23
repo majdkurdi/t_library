@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constatnts.dart';
+import '../notifiers/auth_notifier.dart';
 import '../screens/auth_screen.dart';
+import '../screens/main_screen.dart';
+import '../services/shared_prefrences.dart';
 import '../widgets/screens_background.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -13,6 +17,7 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
+  final authProvider = ChangeNotifierProvider((ref) => AuthNotifier());
   AnimationController? _controller;
   @override
   void initState() {
@@ -34,7 +39,14 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       setState(() {});
     });
     Future.delayed(Duration(seconds: 5)).then(
-      (_) => Navigator.of(context).pushReplacementNamed(AuthScreen.routeName),
+      (_) async {
+        if (await isLoggedIn()) {
+          await context.read(authProvider).quickLogIn();
+          Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
+        } else {
+          Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
+        }
+      },
     );
   }
 

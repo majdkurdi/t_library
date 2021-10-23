@@ -3,17 +3,26 @@ import 'dart:convert';
 import '../models/book.dart';
 import 'http_service.dart' as http;
 
-const String baseUrl = 'http://192.168.137.1:8000/api';
+// const String baseUrl = 'http://192.168.137.1:8000/api';
 
 class BooksService {
   Future<List<Book>> getBooks() async {
-    print('csv');
+    try {
+      final response = await http.get('/book/topRated');
+      print('done');
+      print(jsonDecode(response.body));
+      return bookFromJson(response.body);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
 
-    final response = await http.get('/book');
-    print('done');
-    print(response.request?.headers);
-    print(jsonDecode(response.body));
-
-    return bookFromJson(response.body);
+  Future rateBook({required int bookId, required int rate}) async {
+    try {
+      await http.post('/book/$bookId/rate', body: {'rate': '$rate'});
+    } on Exception catch (e) {
+      print(e);
+      rethrow;
+    }
   }
 }

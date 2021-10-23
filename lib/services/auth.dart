@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:t_library/models/auth_response.dart';
 import './http_service.dart';
 import '../models/user.dart';
 
@@ -16,7 +17,7 @@ class Auth {
     return _instance!;
   }
 
-  Future<User?> signUp({
+  Future<AuthResponse?> signUp({
     required String name,
     required String email,
     required String password,
@@ -27,14 +28,14 @@ class Auth {
       final signUpUrl = Uri.parse(''); //TODO add signUpUrl
       final response = await http.post(Uri.parse('uri'));
       final responseBody = json.decode(response.body) as Map<String, dynamic>;
-      return User.fromJson(responseBody);
+      return AuthResponse.fromJson(responseBody);
     } on Exception catch (e) {
       print(e);
       rethrow;
     }
   }
 
-  Future<User?> logIn({
+  Future<AuthResponse?> logIn({
     required String email,
     required String password,
   }) async {
@@ -43,7 +44,7 @@ class Auth {
           body: {"email": email, "password": password});
       final responseBody = json.decode(response.body) as Map<String, dynamic>;
       print(responseBody);
-      return User.fromJson(responseBody);
+      return AuthResponse.fromJson(responseBody);
     } on Exception catch (e) {
       print(e);
       rethrow;

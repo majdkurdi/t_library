@@ -57,7 +57,7 @@ class Book {
         updatedAt: DateTime.parse(json["updated_at"] as String),
         author: json["author"] as String,
         publishDate: DateTime.parse(json["publish_date"] as String),
-        image: json["image"] as String,
+        image: 'http://10.0.2.2:8000/storage/${json["image"] as String}',
         rentPrice: json["rent_price"] as int,
         pages: json["pages"] as int,
         publisher: json["publisher"] as String,

@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/book.dart';
-import '../widgets/book_info_listtile.dart';
+import '../notifiers/books_notifier.dart';
+import '../widgets/book_details.dart';
+import '../widgets/my_icon_button.dart';
 import '../widgets/screens_background.dart';
 
 class BookDetailsScreen extends StatelessWidget {
+  final booksProvider =
+      ChangeNotifierProvider<BooksNotifier>((ref) => BooksNotifier());
+
   final Book book;
   BookDetailsScreen(this.book);
   @override
@@ -30,51 +36,72 @@ class BookDetailsScreen extends StatelessWidget {
                   children: [
                     Text(book.title,
                         style: TextStyle(color: Colors.white, fontSize: 30)),
-                    FloatingActionButton(
-                      onPressed: () {},
-                      child: Icon(Icons.add_shopping_cart),
-                      backgroundColor: Colors.white.withOpacity(0.4),
+                    Row(
+                      children: [
+                        FloatingActionButton(
+                          heroTag: '1',
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (ctx) => Dialog(
+                                    backgroundColor: Colors.white,
+                                    elevation: 1,
+                                    child: Container(
+                                      width: 300,
+                                      height: 150,
+                                      color: Colors.white,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text('Rate this book:',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold)),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              for (int i = 0; i < 5; i++)
+                                                MyIconButton(
+                                                    icon: Icon(
+                                                        Icons.star_border,
+                                                        size: 40),
+                                                    onTap: () {
+                                                      context
+                                                          .read(booksProvider)
+                                                          .rateBook(
+                                                              bookId: book.id,
+                                                              rate: i + 1);
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    })
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    )));
+                          },
+                          child: Icon(Icons.rate_review),
+                          backgroundColor: Colors.white.withOpacity(0.4),
+                        ),
+                        SizedBox(width: 10),
+                        FloatingActionButton(
+                          heroTag: '2',
+                          onPressed: () {},
+                          child: Icon(Icons.add_shopping_cart),
+                          backgroundColor: Colors.white.withOpacity(0.4),
+                        ),
+                      ],
                     )
                   ],
                 ),
               ),
               Expanded(
-                child: Card(
-                  color: Colors.transparent,
-                  child: SingleChildScrollView(
-                    child: Column(children: [
-                      BookInfoListTile(
-                        icon: Icons.attribution,
-                        info: 'Author: ${book.author}',
-                      ),
-                      BookInfoListTile(
-                        icon: Icons.date_range,
-                        info: 'Date: ${book.publishDate.year}',
-                      ),
-                      BookInfoListTile(
-                        info: 'Language: ${book.language}',
-                        icon: Icons.language,
-                      ),
-                      BookInfoListTile(
-                        info: 'Rate: ${book.rate}',
-                        icon: Icons.star_border,
-                      ),
-                      BookInfoListTile(
-                        info: 'Publisher: ${book.publisher}',
-                        icon: Icons.maps_home_work,
-                      ),
-                      BookInfoListTile(
-                        info: 'Sell Price: ${book.price}\$',
-                        icon: Icons.local_offer,
-                      ),
-                      BookInfoListTile(
-                        info: 'Rent Price: ${book.rentPrice}\$',
-                        icon: Icons.local_offer,
-                      ),
-                    ]),
-                  ),
-                ),
-              )
+                child: BookDetails(book: book),
+              ),
             ],
           ),
         ),
