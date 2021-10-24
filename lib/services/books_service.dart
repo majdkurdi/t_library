@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:t_library/models/category.dart';
+
 import '../models/book.dart';
 import '../models/comment.dart';
 import 'http_service.dart' as http;
@@ -10,6 +12,18 @@ class BooksService {
   Future<List<Book>> getBooks() async {
     try {
       final response = await http.get('/book/topRated');
+      print('done');
+      print(jsonDecode(response.body));
+      return bookFromJson(response.body);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<List<Book>> getTopRated(categoryId) async {
+    try {
+      final response =
+          await http.get('/book/topRated', params: {"category_id": categoryId});
       print('done');
       print(jsonDecode(response.body));
       return bookFromJson(response.body);

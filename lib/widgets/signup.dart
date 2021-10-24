@@ -34,6 +34,17 @@ class _SignupState extends State<Signup> {
   var _hideSignUpPassword = true;
 
   @override
+  void dispose() {
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _addressFocusNode.dispose();
+    _nameFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
+    _phoneNumberFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[

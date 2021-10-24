@@ -7,6 +7,7 @@ import '../screens/acount_screen.dart';
 import '../screens/cart_screen.dart';
 import '../widgets/auth_text_form_field.dart';
 import '../widgets/books_view.dart';
+import '../widgets/category_avatar.dart';
 import '../widgets/my_icon_button.dart';
 import '../widgets/screens_background.dart';
 
@@ -21,11 +22,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool loading = true;
+  String? searchText;
 
   @override
   void initState() {
     Future.delayed(Duration(seconds: 0)).then((_) async {
       await context.read(booksProvider).getBooks();
+      await context.read(booksProvider).getTopRatedBooks(0);
+      await context.read(booksProvider).getCategories();
       setState(() => loading = false);
     });
     super.initState();
@@ -88,52 +92,42 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15, right: 15, bottom: 15),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(children: [
-                          CircleAvatar(
-                            child: Text('All'),
-                            backgroundColor: Theme.of(context).accentColor,
+                    Consumer(
+                      builder: (ctx, watch, _) {
+                        final book = watch(booksProvider);
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15, right: 15, bottom: 15),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (ctx, i) => Row(
+                                              children: [
+                                                CategoryAvatar(
+                                                    book.categories[i], () {
+                                                  setState(() {});
+                                                }),
+                                                SizedBox(width: 10)
+                                              ],
+                                            ),
+                                        itemCount: book.categories.length),
+                                  ]),
+                            ),
                           ),
-                          SizedBox(width: 10),
-                          CircleAvatar(
-                            child: Text('His'),
-                            backgroundColor: Theme.of(context).accentColor,
-                          ),
-                          SizedBox(width: 10),
-                          CircleAvatar(
-                            child: Text('Poli'),
-                            backgroundColor: Theme.of(context).accentColor,
-                          ),
-                          SizedBox(width: 10),
-                          CircleAvatar(
-                            child: Text('Art'),
-                            backgroundColor: Theme.of(context).accentColor,
-                          ),
-                          SizedBox(width: 10),
-                          CircleAvatar(
-                            child: Text('sci'),
-                            backgroundColor: Theme.of(context).accentColor,
-                          ),
-                          SizedBox(width: 10),
-                          CircleAvatar(
-                            child: Text('sci'),
-                            backgroundColor: Theme.of(context).accentColor,
-                          ),
-                          SizedBox(width: 10),
-                          CircleAvatar(
-                            child: Text('sci'),
-                            backgroundColor: Theme.of(context).accentColor,
-                          )
-                        ]),
-                      ),
+                        );
+                      },
                     ),
                     Consumer(builder: (ctx, watch, _) {
                       final booksNotifier = watch(booksProvider);
-                      final books = booksNotifier.books;
                       return Expanded(
                         child: SingleChildScrollView(
                           child: Container(
@@ -142,13 +136,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 BooksView(
                                   title: 'Most Rated',
-                                  books: books,
+                                  books: booksNotifier.topRatedBooks,
                                 ),
                                 BooksView(
-                                  title: 'Recommended For You',
-                                  books: books,
-                                ),
-                                BooksView(books: books, title: 'All')
+                                    books: booksNotifier.books, title: 'All')
                               ],
                             ),
                           ),

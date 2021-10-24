@@ -9,8 +9,9 @@ final client = InterceptedClient.build(
 );
 
 Future<http.Response> get(String endpoint,
-    {Map<String, String>? headers}) async {
-  return await client.get('$baseUrl$endpoint'.toUri(), headers: headers);
+    {Map<String, String>? headers, Map<String, dynamic>? params}) async {
+  return await client.get('$baseUrl$endpoint'.toUri(),
+      headers: headers, params: params);
 }
 
 Future<http.Response> post(String endpoint,

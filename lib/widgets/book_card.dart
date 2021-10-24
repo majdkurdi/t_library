@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import './my_icon_button.dart';
 import '../models/book.dart';
+import '../notifiers/cart_notifier.dart';
 import '../screens/book_details_screen.dart';
 
 class BookCard extends StatelessWidget {
   final Book book;
   BookCard(this.book);
+  final cartProvider =
+      ChangeNotifierProvider<CartNotifier>((ref) => CartNotifier());
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -34,6 +38,8 @@ class BookCard extends StatelessWidget {
                       placeholder:
                           AssetImage('assets/images/t.library-logo.png'),
                       image: NetworkImage(book.image),
+                      placeholderErrorBuilder: (ctx, _, __) =>
+                          Image.asset('assets/images/t.library-logo.png'),
                     ),
                   )),
               Expanded(
@@ -54,10 +60,11 @@ class BookCard extends StatelessWidget {
                     MyIconButton(
                       icon: Icon(Icons.add_shopping_cart,
                           color: Colors.white, size: 22),
-                      onTap: () {
+                      onTap: () async {
+                        await context.read(cartProvider).addToCart(book);
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('add to cart')));
+                            SnackBar(content: Text('book added to cart!')));
                       },
                     ),
                     SizedBox(
