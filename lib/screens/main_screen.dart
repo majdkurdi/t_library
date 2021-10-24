@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './home_screen.dart';
+import './library_screen.dart';
 
 class MainScreen extends StatefulWidget {
   static const routeName = '/main';
@@ -15,7 +16,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget getBody() {
     return IndexedStack(index: currentIndex, children: [
       HomeScreen(),
-      //library,
+      LibraryScreen()
       //notifications
     ]);
   }
