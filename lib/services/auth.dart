@@ -40,6 +40,15 @@ class Auth {
     }
   }
 
+  Future verify(String verficationCode) async {
+    try {
+      final response =
+          await post('/verify', body: {'verified_code': verficationCode});
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
+
   Future<AuthResponse?> logIn({
     required String email,
     required String password,

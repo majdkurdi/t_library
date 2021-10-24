@@ -6,7 +6,7 @@ class Replay {
   final String body;
 
   Replay({required this.id, required this.body});
-  factory Replay.fromJson(json) {
+  factory Replay.fromJson(Map<String, dynamic> json) {
     return Replay(id: json['id'] as int, body: json['body'] as String);
   }
 }

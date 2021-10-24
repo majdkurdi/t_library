@@ -83,6 +83,14 @@ class AuthNotifier extends ChangeNotifier {
     }
   }
 
+  Future verify(String verficationCode) async {
+    try {
+      await _auth.verify(verficationCode);
+    } on Exception catch (e) {
+      // TODO
+    }
+  }
+
   String? get token {
     return _currentUser?.token;
   }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import '../models/book.dart';
 import '../models/category.dart';
 import '../models/comment.dart';
+import '../models/replay.dart';
 import '../services/books_service.dart';
 import '../services/category.dart';
 
@@ -71,6 +72,22 @@ class BooksNotifier extends ChangeNotifier {
     } on Exception catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  Future<Comment?> addComment(String comment, int bookId) async {
+    try {
+      return await _bookService.addComment(comment, bookId);
+    } on Exception catch (_) {
+      return null;
+    }
+  }
+
+  Future<Replay?> addReplay(String replay, int commentId) async {
+    try {
+      return await _bookService.addReplay(replay, commentId);
+    } on Exception catch (_) {
+      return null;
     }
   }
 }
