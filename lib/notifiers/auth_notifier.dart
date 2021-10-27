@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/auth_response.dart';
 import '../models/user.dart';
 import '../services/auth.dart';
 import '../services/shared_prefrences.dart';
 import '../services/user.dart';
+
+final authProvider =
+    ChangeNotifierProvider<AuthNotifier>((ref) => AuthNotifier());
 
 class AuthNotifier extends ChangeNotifier {
   AuthNotifier._internal();
@@ -69,14 +73,12 @@ class AuthNotifier extends ChangeNotifier {
       required String phoneNumber,
       required String name}) async {
     try {
-      _currentUser = await _auth.signUp(
+      return await _auth.signUp(
           name: name,
           email: email,
           password: password,
           address: address,
           phoneNumber: phoneNumber);
-      await rememberUser(_currentUser!);
-      return true;
     } on Exception catch (e) {
       print(e);
       return false;
@@ -88,6 +90,22 @@ class AuthNotifier extends ChangeNotifier {
       await _auth.verify(verficationCode);
     } on Exception catch (e) {
       // TODO
+    }
+  }
+
+  Future<bool> resetPassword(String email) async {
+    try {
+      return await _auth.resetPassword(email);
+    } on Exception catch (_) {
+      return false;
+    }
+  }
+
+  Future<bool> doResetPassword(String code, String newPassword) async {
+    try {
+      return await _auth.doResetPassword(code, newPassword);
+    } on Exception catch (_) {
+      return false;
     }
   }
 

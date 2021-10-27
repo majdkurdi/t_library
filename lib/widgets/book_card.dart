@@ -8,8 +8,7 @@ import '../screens/book_details_screen.dart';
 class BookCard extends StatelessWidget {
   final Book book;
   BookCard(this.book);
-  final cartProvider =
-      ChangeNotifierProvider<CartNotifier>((ref) => CartNotifier());
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -61,10 +60,13 @@ class BookCard extends StatelessWidget {
                       icon: Icon(Icons.add_shopping_cart,
                           color: Colors.white, size: 22),
                       onTap: () async {
-                        await context.read(cartProvider).addToCart(book);
+                        final res =
+                            await context.read(cartProvider).addToCart(book);
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('book added to cart!')));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(res == 'error'
+                                ? 'error!'
+                                : 'book added to cart!')));
                       },
                     ),
                     SizedBox(

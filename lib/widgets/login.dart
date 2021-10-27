@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:t_library/screens/reset_password_screen.dart';
 import 'auth_text_form_field.dart';
 
 class Login extends StatefulWidget {
@@ -115,9 +116,12 @@ class _LoginState extends State<Login> {
           Padding(
             padding: const EdgeInsets.only(right: 24.0),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (ctx) => ResetPasswordScreen()));
+              },
               child: Text(
-                'forget password ?',
+                'forgot password?',
                 style: TextStyle(color: Colors.white),
               ),
             ),

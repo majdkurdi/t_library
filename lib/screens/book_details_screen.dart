@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:t_library/notifiers/cart_notifier.dart';
 import '../models/book.dart';
 import '../models/comment.dart';
 import '../notifiers/books_notifier.dart';
+import '../notifiers/cart_notifier.dart';
 import '../widgets/book_details.dart';
 import '../widgets/my_icon_button.dart';
 import '../widgets/screens_background.dart';
@@ -18,11 +18,6 @@ class BookDetailsScreen extends StatefulWidget {
 }
 
 class _BookDetailsScreenState extends State<BookDetailsScreen> {
-  final booksProvider =
-      ChangeNotifierProvider<BooksNotifier>((ref) => BooksNotifier());
-  final cartProvider =
-      ChangeNotifierProvider<CartNotifier>((ref) => CartNotifier());
-
   List<Comment> comments = [];
 
   @override

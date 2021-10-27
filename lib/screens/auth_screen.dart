@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constatnts.dart';
 import '../notifiers/auth_notifier.dart';
+import '../screens/confirm_account_screen.dart';
 import '../screens/main_screen.dart';
 import '../widgets/login.dart';
 import '../widgets/login_button.dart';
@@ -14,10 +15,6 @@ enum AuthType {
   LogIn,
   SignUp,
 }
-
-final authProvider = Provider<AuthNotifier>((ref) {
-  return AuthNotifier();
-});
 
 class AuthScreen extends StatefulWidget {
   static const routeName = '/login';
@@ -118,15 +115,25 @@ class _AuthScreenState extends State<AuthScreen> {
                                   SnackBar(content: Text(loggedIn)));
                             }
                           } else {
-                            final loggedIn = await auth.signUp(
+                            final signedUp = await auth.signUp(
                                 email: _emailController.text,
                                 password: _passwordController.text,
                                 address: _addressController.text,
                                 phoneNumber: _phoneNumberController.text,
                                 name: _nameController.text);
-                            if (loggedIn) {
+                            if (signedUp) {
                               Navigator.of(context)
-                                  .pushReplacementNamed(MainScreen.routeName);
+                                  .push(MaterialPageRoute(
+                                      builder: (ctx) => ConfirmAccountScreen()))
+                                  .then((val) {
+                                if (val == true) {
+                                  setState(() => authType = AuthType.LogIn);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              'Signed up successfuly, you can login now!')));
+                                }
+                              });
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text('Error!')));

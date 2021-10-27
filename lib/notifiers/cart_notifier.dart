@@ -1,26 +1,37 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/book.dart';
 import '../models/cart_item.dart';
+import '../services/books_service.dart';
+
+final cartProvider =
+    ChangeNotifierProvider<CartNotifier>((ref) => CartNotifier());
 
 class CartNotifier extends ChangeNotifier {
   List<CartItem> cart = [];
+  final _booksService = BooksService();
 
-  CartNotifier._internal();
-  static CartNotifier? _instance;
-  factory CartNotifier() {
-    if (_instance == null) {
-      _instance = CartNotifier._internal();
-    }
-    return _instance!;
-  }
+  // CartNotifier._internal();
+  // static CartNotifier? _instance;
+  // factory CartNotifier() {
+  //   if (_instance == null) {
+  //     _instance = CartNotifier._internal();
+  //   }
+  //   return _instance!;
+  // }
 
   Future addToCart(Book book) async {
-    if (cart.any((element) => element.id == book.id)) {
-      cart.firstWhere((element) => element.id == book.id).quantity++;
+    final added = await _booksService.addBookToCart(CartItem.fromBook(book));
+    if (added) {
+      if (cart.any((element) => element.id == book.id)) {
+        cart.firstWhere((element) => element.id == book.id).quantity++;
+      } else {
+        cart.add(CartItem.fromBook(book));
+      }
+      print(cart.length);
     } else {
-      cart.add(CartItem.fromBook(book));
+      return 'error';
     }
-    print(cart[0].title);
     notifyListeners();
   }
 
@@ -39,5 +50,15 @@ class CartNotifier extends ChangeNotifier {
       tot += e.price * e.quantity;
     });
     return tot;
+  }
+
+  Future<bool> order() async {
+    if ((await _booksService.submitOrder())) {
+      cart = [];
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
   }
 }

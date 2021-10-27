@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:t_library/screens/more_books_screen.dart';
+import '../screens/library_books_screen.dart';
 import '../widgets/screens_background.dart';
 
 class LibraryScreen extends StatelessWidget {
@@ -7,28 +7,38 @@ class LibraryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreensBackground(
         child: SafeArea(
-      child: Column(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height / 3,
-            child: Center(
-              child: Image.asset('assets/images/t.library-logo.png'),
-            ),
-          ),
-          Text('MY LIBRARY',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold)),
-          Column(
+      child: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LibraryTap(Icons.shopping_cart_outlined, 'Purchesed'),
-              LibraryTap(Icons.shopping_bag_outlined, 'Rented'),
-              LibraryTap(Icons.favorite_border, 'Favorites'),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height / 3,
+                child: Center(
+                  child: Image.asset('assets/images/t.library-logo.png'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text('MY LIBRARY',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold)),
+              ),
+              Column(
+                children: [
+                  LibraryTap(Icons.shopping_cart_outlined, 'Purchesed'),
+                  LibraryTap(Icons.shopping_bag_outlined, 'Rented'),
+                  LibraryTap(Icons.favorite_border, 'Favorites'),
+                ],
+              )
             ],
-          )
-        ],
+          ),
+        ),
       ),
     ));
   }
@@ -48,9 +58,8 @@ class LibraryTap extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: GestureDetector(
             onTap: () {
-              // Navigator.of(context).push(MaterialPageRoute(
-              //     builder: (ctx) =>
-              //         MoreBooksScreen(title: title, books: books)));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (ctx) => LibraryBooksScreen(title: title)));
             },
             child: ListTile(
               leading:

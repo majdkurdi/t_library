@@ -6,9 +6,6 @@ import '../notifiers/auth_notifier.dart';
 import '../screens/auth_screen.dart';
 import '../widgets/screens_background.dart';
 
-final authProvider =
-    ChangeNotifierProvider<AuthNotifier>((ref) => AuthNotifier());
-
 class AccountScreen extends StatefulWidget {
   @override
   State<AccountScreen> createState() => _AccountScreenState();

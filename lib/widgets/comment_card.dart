@@ -6,9 +6,6 @@ import '../notifiers/books_notifier.dart';
 import '../widgets/my_icon_button.dart';
 import '../widgets/simple_text_field.dart';
 
-final booksProvider =
-    ChangeNotifierProvider<BooksNotifier>((ref) => BooksNotifier());
-
 class CommentCard extends StatefulWidget {
   final Comment comment;
   CommentCard(this.comment);

@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/book.dart';
 import '../models/category.dart';
 import '../models/comment.dart';
 import '../models/replay.dart';
 import '../services/books_service.dart';
 import '../services/category.dart';
+
+final booksProvider =
+    ChangeNotifierProvider<BooksNotifier>((ref) => BooksNotifier());
 
 class BooksNotifier extends ChangeNotifier {
   BooksNotifier._internal();
@@ -20,6 +24,7 @@ class BooksNotifier extends ChangeNotifier {
   List<Category> categories = [];
   List<Book> books = [];
   List<Book> topRatedBooks = [];
+  List<Book> orderedBooks = [];
   final _bookService = BooksService();
   final _categoryService = CategoryService();
 
@@ -37,6 +42,17 @@ class BooksNotifier extends ChangeNotifier {
   Future<bool> getTopRatedBooks(int categoryId) async {
     try {
       topRatedBooks = await _bookService.getTopRated(categoryId);
+      notifyListeners();
+      return true;
+    } on Exception catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> getOrderedBooks() async {
+    try {
+      orderedBooks = await _bookService.getOrderedBooks();
       notifyListeners();
       return true;
     } on Exception catch (e) {

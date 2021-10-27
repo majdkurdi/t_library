@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../notifiers/auth_notifier.dart';
 import '../notifiers/books_notifier.dart';
+import '../notifiers/cart_notifier.dart';
 import '../screens/acount_screen.dart';
 import '../screens/cart_screen.dart';
 import '../widgets/auth_text_form_field.dart';
@@ -10,10 +11,6 @@ import '../widgets/books_view.dart';
 import '../widgets/category_avatar.dart';
 import '../widgets/my_icon_button.dart';
 import '../widgets/screens_background.dart';
-
-final booksProvider =
-    ChangeNotifierProvider<BooksNotifier>((ref) => BooksNotifier());
-final authProvider = Provider<AuthNotifier>((ref) => AuthNotifier());
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -79,16 +76,33 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: MyIconButton(
-                                icon: Icon(Icons.shopping_cart,
-                                    color: Colors.white.withOpacity(0.5)),
-                                onTap: () {
-                                  Navigator.of(context)
-                                      .pushNamed(CartScreen.routeName);
-                                }),
-                          )
+                          Consumer(builder: (context, watch, _) {
+                            final cart = watch(cartProvider);
+                            print('build');
+                            print(cart.cart.length);
+                            return Stack(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: MyIconButton(
+                                      icon: Icon(Icons.shopping_cart,
+                                          color: Colors.white.withOpacity(0.5)),
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .pushNamed(CartScreen.routeName);
+                                      }),
+                                ),
+                                CircleAvatar(
+                                  radius: 8,
+                                  backgroundColor: Theme.of(context)
+                                      .accentColor
+                                      .withOpacity(0.8),
+                                  child: Text('${cart.cart.length}',
+                                      style: TextStyle(fontSize: 8)),
+                                )
+                              ],
+                            );
+                          })
                         ],
                       ),
                     ),
@@ -101,26 +115,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 50,
-                              child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        scrollDirection: Axis.horizontal,
-                                        itemBuilder: (ctx, i) => Row(
-                                              children: [
-                                                CategoryAvatar(
-                                                    book.categories[i], () {
-                                                  setState(() {});
-                                                }),
-                                                SizedBox(width: 10)
-                                              ],
-                                            ),
-                                        itemCount: book.categories.length),
-                                  ]),
+                              height: 30,
+                              child: Row(children: [
+                                ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (ctx, i) => Row(
+                                          children: [
+                                            CategoryAvatar(book.categories[i],
+                                                () {
+                                              setState(
+                                                  () => loading = !loading);
+                                            }),
+                                            SizedBox(width: 10)
+                                          ],
+                                        ),
+                                    itemCount: book.categories.length),
+                              ]),
                             ),
                           ),
                         );

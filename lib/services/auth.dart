@@ -17,7 +17,7 @@ class Auth {
     return _instance!;
   }
 
-  Future<AuthResponse?> signUp({
+  Future<bool> signUp({
     required String name,
     required String email,
     required String password,
@@ -33,7 +33,8 @@ class Auth {
         "address": address
       });
       final responseBody = json.decode(response.body) as Map<String, dynamic>;
-      return AuthResponse.fromJson(responseBody);
+      print(responseBody);
+      return responseBody['name'] != null;
     } on Exception catch (e) {
       print(e);
       rethrow;
@@ -73,6 +74,31 @@ class Auth {
       print('logged out!');
     } on Exception catch (_) {
       rethrow;
+    }
+  }
+
+  Future<bool> resetPassword(String email) async {
+    try {
+      final response = await post('/resetPassowrd', body: {'email': '$email'});
+      print(response.body);
+      return ((jsonDecode(response.body) as Map<String, dynamic>)['success']
+          as bool);
+    } on Exception catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> doResetPassword(String code, String newPassword) async {
+    try {
+      final response = await post('/doReset',
+          body: {"verified_code": code, "new_password": "magdngngsy"});
+      print(response.body);
+      return ((jsonDecode(response.body) as Map<String, dynamic>)['success']
+          as bool);
+    } on Exception catch (e) {
+      print(e);
+      return false;
     }
   }
 }

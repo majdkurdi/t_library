@@ -8,14 +8,13 @@ class CartItemCard extends StatelessWidget {
   final CartItem item;
   final Function function;
   CartItemCard(this.index, this.item, this.function);
-  final cartPrivider =
-      ChangeNotifierProvider<CartNotifier>((ref) => CartNotifier());
+
   @override
   Widget build(BuildContext context) {
     return Dismissible(
       key: GlobalKey(),
       onDismissed: (_) {
-        context.read(cartPrivider).removeFromCart(item.id);
+        context.read(cartProvider).removeFromCart(item.id);
         function();
       },
       direction: DismissDirection.endToStart,

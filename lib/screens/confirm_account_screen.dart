@@ -4,8 +4,6 @@ import '../notifiers/auth_notifier.dart';
 import '../widgets/screens_background.dart';
 import '../widgets/simple_text_field.dart';
 
-final authProvider = ChangeNotifierProvider((ref) => AuthNotifier());
-
 class ConfirmAccountScreen extends StatefulWidget {
   @override
   State<ConfirmAccountScreen> createState() => _ConfirmAccountScreenState();
@@ -72,6 +70,7 @@ class _ConfirmAccountScreenState extends State<ConfirmAccountScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text('Verified!'),
                             ));
+                            Navigator.of(context).pop(true);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -95,6 +94,7 @@ class _ConfirmAccountScreenState extends State<ConfirmAccountScreen> {
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
+              color: Colors.black.withOpacity(0.2),
               child: Center(
                   child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation(Colors.white),

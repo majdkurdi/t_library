@@ -16,4 +16,15 @@ class CartItem {
     return CartItem(
         id: book.id, price: book.price, quantity: 1, title: book.title);
   }
+
+  Map<String, dynamic> toJson() => {
+        'books': [
+          {
+            'id': id,
+            'amount': quantity,
+            'status': 'order',
+            'order_type': 1,
+          }
+        ]
+      };
 }

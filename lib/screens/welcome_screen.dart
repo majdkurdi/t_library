@@ -17,7 +17,6 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
-  final authProvider = ChangeNotifierProvider((ref) => AuthNotifier());
   AnimationController? _controller;
   @override
   void initState() {

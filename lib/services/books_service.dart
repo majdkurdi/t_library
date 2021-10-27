@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:t_library/models/cart_item.dart';
 import 'package:t_library/models/category.dart';
 import 'package:t_library/models/replay.dart';
 
@@ -12,7 +13,7 @@ import 'http_service.dart' as http;
 class BooksService {
   Future<List<Book>> getBooks() async {
     try {
-      final response = await http.get('/book/topRated');
+      final response = await http.get('/book');
       print('done');
       print(jsonDecode(response.body));
       return bookFromJson(response.body);
@@ -21,12 +22,21 @@ class BooksService {
     }
   }
 
-  Future<List<Book>> getTopRated(categoryId) async {
+  Future<List<Book>> getTopRated(int categoryId) async {
     try {
       final response =
           await http.get('/book/topRated', params: {"category_id": categoryId});
       print('done');
       print(jsonDecode(response.body));
+      return bookFromJson(response.body);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<List<Book>> getOrderedBooks() async {
+    try {
+      final response = await http.get('/book/getOrderedBooks');
       return bookFromJson(response.body);
     } on Exception catch (_) {
       rethrow;
@@ -78,6 +88,36 @@ class BooksService {
       return commentsFromJson(response.body);
     } on Exception catch (_) {
       rethrow;
+    }
+  }
+
+  Future<bool> addBookToCart(CartItem item) async {
+    try {
+      final response = await http.post('/book/addTocart', body: item.toJson());
+      print(response.body);
+      if (jsonDecode(response.body) == 'done') {
+        return true;
+      } else {
+        return false;
+      }
+    } on Exception catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> submitOrder() async {
+    try {
+      final response =
+          await http.post('/book/submitOrder', body: {"status": "order"});
+      if (jsonDecode(response.body) == 'done') {
+        return true;
+      } else {
+        return false;
+      }
+    } on Exception catch (e) {
+      print(e);
+      return false;
     }
   }
 }

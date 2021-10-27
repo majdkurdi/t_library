@@ -13,6 +13,7 @@ class AuthorizationInterceptor implements InterceptorContract {
     } on Exception catch (e) {
       print(e);
     }
+    print(data);
     return data;
   }
 

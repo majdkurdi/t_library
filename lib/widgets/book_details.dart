@@ -8,9 +8,6 @@ import '../models/comment.dart';
 import '../notifiers/books_notifier.dart';
 import 'book_info_listtile.dart';
 
-final booksProvider =
-    ChangeNotifierProvider<BooksNotifier>((ref) => BooksNotifier());
-
 class BookDetails extends StatefulWidget {
   BookDetails({Key? key, required this.book, required this.comments})
       : super(key: key);
