@@ -20,7 +20,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool loading = true;
-  String searchText = '';
+  final searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -40,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final searchBooks = context
         .read(booksProvider)
         .books
-        .where((e) => e.title.startsWith(searchText))
+        .where((e) => e.title.startsWith(searchController.text))
         .toList();
     return ScreensBackground(
         child: loading
@@ -60,24 +66,39 @@ class _HomeScreenState extends State<HomeScreen> {
                           horizontal: 10, vertical: 30),
                       child: Row(
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (ctx) => AccountScreen()));
-                            },
-                            child: CircleAvatar(
-                              child: Text(
-                                username![0].toUpperCase(),
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              backgroundColor: Colors.white.withOpacity(0.5),
-                            ),
-                          ),
+                          searchController.text != ''
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: MyIconButton(
+                                      icon: Icon(Icons.arrow_back,
+                                          color: Colors.white),
+                                      onTap: () {
+                                        setState(
+                                            () => searchController.text = '');
+                                        FocusScope.of(context).unfocus();
+                                      }),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) => AccountScreen()));
+                                  },
+                                  child: CircleAvatar(
+                                    child: Text(
+                                      username![0].toUpperCase(),
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    backgroundColor:
+                                        Colors.white.withOpacity(0.5),
+                                  ),
+                                ),
                           SizedBox(width: 10),
                           Expanded(
                             child: AuthTextFormField(
+                              controller: searchController,
                               onChanged: (val) {
-                                setState(() => searchText = val);
+                                setState(() => searchController.text = val);
                               },
                               hintText: 'Search',
                               suffix: Icon(
@@ -115,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    searchText != ''
+                    searchController.text != ''
                         ? Expanded(
                             child: SingleChildScrollView(
                               child: GridView.builder(
