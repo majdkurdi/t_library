@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/src/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/book.dart';
 import '../notifiers/books_notifier.dart';
 import '../widgets/book_card.dart';
@@ -22,8 +22,13 @@ class _LibraryBooksScreenState extends State<LibraryBooksScreen> {
   @override
   void initState() {
     Future.delayed(Duration(seconds: 0)).then((_) async {
-      await context.read(booksProvider).getOrderedBooks();
-      books = context.read(booksProvider).orderedBooks;
+      if (widget.title == 'Purchesed') {
+        await context.read(booksProvider).getOrderedBooks();
+        books = context.read(booksProvider).orderedBooks;
+      } else {
+        await context.read(booksProvider).getFavorites();
+        books = context.read(booksProvider).favorites;
+      }
       setState(() => loading = false);
     });
     super.initState();

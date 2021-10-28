@@ -25,6 +25,7 @@ class BooksNotifier extends ChangeNotifier {
   List<Book> books = [];
   List<Book> topRatedBooks = [];
   List<Book> orderedBooks = [];
+  List<Book> favorites = [];
   final _bookService = BooksService();
   final _categoryService = CategoryService();
 
@@ -105,5 +106,20 @@ class BooksNotifier extends ChangeNotifier {
     } on Exception catch (_) {
       return null;
     }
+  }
+
+  Future<bool> getFavorites() async {
+    try {
+      favorites = await _bookService.getFavorites();
+      return true;
+    } on Exception catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> toggleFavorite(Book book) async {
+    try {
+      await _bookService.toggleFavorite(book);
+    } on Exception catch (_) {}
   }
 }

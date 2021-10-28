@@ -7,6 +7,7 @@ class AuthTextFormField extends StatelessWidget {
       {Key? key,
       this.hintText,
       this.controller,
+      this.onChanged,
       this.focusNode,
       this.nextFocusNode,
       this.icon,
@@ -20,6 +21,7 @@ class AuthTextFormField extends StatelessWidget {
       : super(key: key);
 
   final String? hintText;
+  final Function(String)? onChanged;
   final Widget? suffix;
   final TextEditingController? controller;
   final FocusNode? focusNode;
@@ -45,6 +47,7 @@ class AuthTextFormField extends StatelessWidget {
               FocusScope.of(context).requestFocus(nextFocusNode);
             }
           : onSubmit,
+      onChanged: onChanged,
       textAlign: TextAlign.start,
       cursorColor: Colors.black,
       validator: validator,

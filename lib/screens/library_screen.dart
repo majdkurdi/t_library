@@ -32,7 +32,6 @@ class LibraryScreen extends StatelessWidget {
               Column(
                 children: [
                   LibraryTap(Icons.shopping_cart_outlined, 'Purchesed'),
-                  LibraryTap(Icons.shopping_bag_outlined, 'Rented'),
                   LibraryTap(Icons.favorite_border, 'Favorites'),
                 ],
               )

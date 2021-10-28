@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:t_library/models/cart_item.dart';
 import 'package:t_library/models/category.dart';
 import 'package:t_library/models/replay.dart';
@@ -118,6 +119,25 @@ class BooksService {
     } on Exception catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  Future<List<Book>> getFavorites() async {
+    try {
+      final response = await http.get('');
+      return bookFromJson(response.body);
+    } on Exception catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  Future<void> toggleFavorite(Book book) async {
+    try {
+      final response = await http.post('', body: {});
+    } on Exception catch (e) {
+      print(e);
+      rethrow;
     }
   }
 }

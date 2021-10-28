@@ -7,6 +7,7 @@ import '../notifiers/cart_notifier.dart';
 import '../screens/acount_screen.dart';
 import '../screens/cart_screen.dart';
 import '../widgets/auth_text_form_field.dart';
+import '../widgets/book_card.dart';
 import '../widgets/books_view.dart';
 import '../widgets/category_avatar.dart';
 import '../widgets/my_icon_button.dart';
@@ -19,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool loading = true;
-  String? searchText;
+  String searchText = '';
 
   @override
   void initState() {
@@ -27,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
       await context.read(booksProvider).getBooks();
       await context.read(booksProvider).getTopRatedBooks(0);
       await context.read(booksProvider).getCategories();
+      await context.read(booksProvider).getFavorites();
       setState(() => loading = false);
     });
     super.initState();
@@ -35,6 +37,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final username = context.read(authProvider).user?.name;
+    final searchBooks = context
+        .read(booksProvider)
+        .books
+        .where((e) => e.title.startsWith(searchText))
+        .toList();
     return ScreensBackground(
         child: loading
             ? Container(
@@ -69,6 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(width: 10),
                           Expanded(
                             child: AuthTextFormField(
+                              onChanged: (val) {
+                                setState(() => searchText = val);
+                              },
                               hintText: 'Search',
                               suffix: Icon(
                                 Icons.search,
@@ -78,7 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           Consumer(builder: (context, watch, _) {
                             final cart = watch(cartProvider);
-                            print('build');
                             print(cart.cart.length);
                             return Stack(
                               children: [
@@ -106,58 +115,87 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    Consumer(
-                      builder: (ctx, watch, _) {
-                        final book = watch(booksProvider);
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15, right: 15, bottom: 15),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Container(
-                              height: 30,
-                              child: Row(children: [
-                                ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (ctx, i) => Row(
-                                          children: [
-                                            CategoryAvatar(book.categories[i],
-                                                () {
-                                              setState(
-                                                  () => loading = !loading);
-                                            }),
-                                            SizedBox(width: 10)
-                                          ],
-                                        ),
-                                    itemCount: book.categories.length),
-                              ]),
+                    searchText != ''
+                        ? Expanded(
+                            child: SingleChildScrollView(
+                              child: GridView.builder(
+                                  itemCount: searchBooks.length,
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 3,
+                                          childAspectRatio: 3 / 5),
+                                  itemBuilder: (ctx, i) =>
+                                      BookCard(searchBooks[i])),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                    Consumer(builder: (ctx, watch, _) {
-                      final booksNotifier = watch(booksProvider);
-                      return Expanded(
-                        child: SingleChildScrollView(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
+                          )
+                        : Expanded(
                             child: Column(
                               children: [
-                                BooksView(
-                                  title: 'Most Rated',
-                                  books: booksNotifier.topRatedBooks,
+                                Consumer(
+                                  builder: (ctx, watch, _) {
+                                    final book = watch(booksProvider);
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15, right: 15, bottom: 15),
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Container(
+                                          height: 30,
+                                          child: Row(children: [
+                                            ListView.builder(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemBuilder: (ctx, i) => Row(
+                                                      children: [
+                                                        CategoryAvatar(
+                                                            book.categories[i],
+                                                            () {
+                                                          setState(() =>
+                                                              loading =
+                                                                  !loading);
+                                                        }),
+                                                        SizedBox(width: 10)
+                                                      ],
+                                                    ),
+                                                itemCount:
+                                                    book.categories.length),
+                                          ]),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                                BooksView(
-                                    books: booksNotifier.books, title: 'All')
+                                Consumer(builder: (ctx, watch, _) {
+                                  final booksNotifier = watch(booksProvider);
+                                  return Expanded(
+                                    child: SingleChildScrollView(
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Column(
+                                          children: [
+                                            BooksView(
+                                              title: 'Most Rated',
+                                              books:
+                                                  booksNotifier.topRatedBooks,
+                                            ),
+                                            BooksView(
+                                                books: booksNotifier.books,
+                                                title: 'All')
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }),
                               ],
                             ),
                           ),
-                        ),
-                      );
-                    }),
                     SizedBox(height: 65)
                   ],
                 ),

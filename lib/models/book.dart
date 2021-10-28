@@ -44,7 +44,7 @@ class Book {
   final int pages;
   final String publisher;
   final String language;
-  final int rate;
+  final double rate;
   final int votes;
   final int totalRate;
 
@@ -62,7 +62,7 @@ class Book {
         pages: json["pages"] as int,
         publisher: json["publisher"] as String,
         language: json["language"] as String,
-        rate: json["rate"] as int,
+        rate: double.parse(json["rate"].toString()),
         votes: json["votes"] as int,
         totalRate: json["total_rate"] as int,
       );
