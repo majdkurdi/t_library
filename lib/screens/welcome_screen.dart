@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:t_library_package/notifiers/auth_notifier.dart';
+import 'package:t_library_package/services/shared_prefrences.dart';
 import '../constatnts.dart';
-import '../notifiers/auth_notifier.dart';
 import '../screens/auth_screen.dart';
 import '../screens/main_screen.dart';
-import '../services/shared_prefrences.dart';
 import '../widgets/screens_background.dart';
 
 class WelcomeScreen extends StatefulWidget {

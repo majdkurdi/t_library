@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:t_library_package/notifiers/auth_notifier.dart';
 
 import '../constatnts.dart';
-import '../notifiers/auth_notifier.dart';
 import '../screens/confirm_account_screen.dart';
 import '../screens/main_screen.dart';
 import '../widgets/login.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/book.dart';
-import '../notifiers/books_notifier.dart';
+import 'package:t_library_package/models/book.dart';
+import 'package:t_library_package/notifiers/books_notifier.dart';
 import '../widgets/book_card.dart';
 import '../widgets/screens_background.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../notifiers/cart_notifier.dart';
+import 'package:t_library_package/notifiers/cart_notifier.dart';
 import '../widgets/cart_item_card.dart';
 import '../widgets/screens_background.dart';
 

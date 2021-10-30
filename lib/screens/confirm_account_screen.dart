@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../notifiers/auth_notifier.dart';
+import 'package:t_library_package/notifiers/auth_notifier.dart';
 import '../widgets/screens_background.dart';
 import '../widgets/simple_text_field.dart';
 

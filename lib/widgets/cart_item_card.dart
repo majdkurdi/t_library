@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/cart_item.dart';
-import '../notifiers/cart_notifier.dart';
+import 'package:t_library_package/models/cart_item.dart';
+import 'package:t_library_package/notifiers/cart_notifier.dart';
 
 class CartItemCard extends StatelessWidget {
   final int index;

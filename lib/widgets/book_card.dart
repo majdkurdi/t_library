@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:t_library_package/models/book.dart';
+import 'package:t_library_package/notifiers/books_notifier.dart';
+import 'package:t_library_package/notifiers/cart_notifier.dart';
 import './my_icon_button.dart';
-import '../models/book.dart';
-import '../notifiers/books_notifier.dart';
-import '../notifiers/cart_notifier.dart';
 import '../screens/book_details_screen.dart';
 
 class BookCard extends StatelessWidget {

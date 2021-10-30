@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:t_library_package/notifiers/auth_notifier.dart';
 
 import '../constatnts.dart';
-import '../notifiers/auth_notifier.dart';
 import '../screens/auth_screen.dart';
 import '../widgets/screens_background.dart';
 

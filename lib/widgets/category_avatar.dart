@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/category.dart';
-import '../notifiers/books_notifier.dart';
+import 'package:t_library_package/models/category.dart';
+import 'package:t_library_package/notifiers/books_notifier.dart';
 
 class CategoryAvatar extends StatelessWidget {
   final Category category;

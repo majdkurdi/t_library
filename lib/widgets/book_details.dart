@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:t_library_package/models/book.dart';
+import 'package:t_library_package/models/comment.dart';
+import 'package:t_library_package/notifiers/books_notifier.dart';
 import './comment_card.dart';
 import './my_icon_button.dart';
 import './simple_text_field.dart';
-import '../models/book.dart';
-import '../models/comment.dart';
-import '../notifiers/books_notifier.dart';
 import 'book_info_listtile.dart';
 
 class BookDetails extends StatefulWidget {

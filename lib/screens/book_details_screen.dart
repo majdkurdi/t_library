@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/book.dart';
-import '../models/comment.dart';
-import '../notifiers/books_notifier.dart';
-import '../notifiers/cart_notifier.dart';
+import 'package:t_library_package/models/book.dart';
+import 'package:t_library_package/models/comment.dart';
+import 'package:t_library_package/notifiers/books_notifier.dart';
+import 'package:t_library_package/notifiers/cart_notifier.dart';
 import '../widgets/book_details.dart';
 import '../widgets/my_icon_button.dart';
 import '../widgets/screens_background.dart';
