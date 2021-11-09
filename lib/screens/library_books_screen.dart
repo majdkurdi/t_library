@@ -62,7 +62,8 @@ class _LibraryBooksScreenState extends State<LibraryBooksScreen> {
                             physics: NeverScrollableScrollPhysics(),
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3, childAspectRatio: 3 / 5),
+                                    crossAxisCount: 3,
+                                    childAspectRatio: 2.5 / 5),
                             itemBuilder: (ctx, i) => BookCard(books[i])),
                       ],
                     ),

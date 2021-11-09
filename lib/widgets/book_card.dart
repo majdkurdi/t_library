@@ -6,10 +6,15 @@ import 'package:t_library_package/notifiers/cart_notifier.dart';
 import './my_icon_button.dart';
 import '../screens/book_details_screen.dart';
 
-class BookCard extends StatelessWidget {
+class BookCard extends StatefulWidget {
   final Book book;
   BookCard(this.book);
 
+  @override
+  State<BookCard> createState() => _BookCardState();
+}
+
+class _BookCardState extends State<BookCard> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (ctx, watch, _) {
@@ -18,8 +23,8 @@ class BookCard extends StatelessWidget {
         padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 8.0),
         child: GestureDetector(
           onTap: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (ctx) => BookDetailsScreen(book)));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (ctx) => BookDetailsScreen(widget.book)));
           },
           child: Container(
               // height: 170,
@@ -39,7 +44,7 @@ class BookCard extends StatelessWidget {
                         fit: BoxFit.cover,
                         placeholder:
                             AssetImage('assets/images/t.library-logo.png'),
-                        image: NetworkImage(book.image),
+                        image: NetworkImage(widget.book.image),
                         placeholderErrorBuilder: (ctx, _, __) =>
                             Image.asset('assets/images/t.library-logo.png'),
                       ),
@@ -49,7 +54,7 @@ class BookCard extends StatelessWidget {
                     child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 4),
-                        child: Text(book.title,
+                        child: Text(widget.book.title,
                             style: TextStyle(color: Colors.white))),
                   ),
                 ),
@@ -63,8 +68,9 @@ class BookCard extends StatelessWidget {
                         icon: Icon(Icons.add_shopping_cart,
                             color: Colors.white, size: 22),
                         onTap: () async {
-                          final res =
-                              await context.read(cartProvider).addToCart(book);
+                          final res = await context
+                              .read(cartProvider)
+                              .addToCart(widget.book);
                           ScaffoldMessenger.of(context).hideCurrentSnackBar();
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(res == 'error'
@@ -77,14 +83,24 @@ class BookCard extends StatelessWidget {
                       ),
                       MyIconButton(
                           icon: Icon(
-                            booksNotifier.favorites.contains(book)
+                            booksNotifier.favorites
+                                    .map((e) => e.id)
+                                    .toList()
+                                    .contains(widget.book.id)
                                 ? Icons.favorite
                                 : Icons.favorite_border,
                             size: 22,
                             color: Theme.of(context).accentColor,
                           ),
-                          onTap: () {
-                            booksNotifier.toggleFavorite(book);
+                          onTap: () async {
+                            final res = await context
+                                .read(booksProvider)
+                                .toggleFavorite(widget.book);
+                            context.read(booksProvider).getFavorites();
+                            setState(() {});
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(content: Text(res)));
                           })
                     ],
                   ),
